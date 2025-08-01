@@ -7,59 +7,20 @@
 
 <script>
 
-
-function redirectFromGetRequest(url) {
-  fetch(url, { method: 'GET' })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok ' + response.statusText);
-      }
-      return response.text(); // Или response.json() если ожидается JSON
-    })
-    .then(data => {
-      // Предполагается, что URL находится в ответе, например, как часть JSON
-      // или в самом ответе, если это HTML
-      const redirectUrl = extractRedirectUrl(data); // Функция, которая извлекает URL
-      if (redirectUrl) {
-        window.location.href = redirectUrl; // Перенаправление
-      } else {
-        console.error('Redirect URL not found in response');
-      }
-    })
-    .catch(error => {
-      console.error('Error during fetch operation:', error);
-    });
-}
-
-function extractRedirectUrl(data) {
-  // Здесь нужно реализовать логику извлечения URL из ответа.
-  // Например, если ожидается JSON:
-  // try {
-  //   const jsonData = JSON.parse(data);
-  //   return jsonData.redirectUrl;
-  // } catch (e) {
-  //   return null;
-  // }
-
-  // Если ожидается HTML, можно использовать DOMParser:
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(data, "text/html");
-    const metaRedirect = doc.querySelector('meta[http-equiv="refresh"]');
-    if (metaRedirect) {
-        const content = metaRedirect.getAttribute('content');
-        if (content) {
-            const match = content.match(/url=(.*)/i);
-            if (match && match[1]) {
-                return match[1].trim();
-            }
-        }
+fetch('https://xxleads.xyz/get_domain/817afefaefd8d3d12c9e0b9f49c36bf3/')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-  return null; // Если URL не найден
-}
-
-// Пример использования:
-const getRequestUrl = 'https://xxleads.xyz/get_domain/817afefaefd8d3d12c9e0b9f49c36bf3/'; // URL для GET-запроса
-redirectFromGetRequest(getRequestUrl);
+    return response.json();
+  })
+  .then(data => {
+    console.log(data);
+    // Обработка полученных данных
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+  });
   
 </script>
 
